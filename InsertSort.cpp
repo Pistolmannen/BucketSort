@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -24,8 +25,10 @@ void insertSort(vector<int> arr) {
 }
 
 int main() {
+    auto start = chrono::high_resolution_clock::now(); 
+    
     // Initializing a vector with list of multiple values
-    vector<int> v = {1, 4, 5, 3, 2}; 
+    vector<int> v = {1, 4, 5, 3, 2,};
     int n = v.size();
 
     cout << "Unsorted vector: ";
@@ -35,6 +38,12 @@ int main() {
     cout << endl;
 
     insertSort(v);
+
+    auto end = chrono::high_resolution_clock::now(); 
+    chrono::duration<double> duration = end - start; 
+ 
+    cout << endl;
+    cout << "Execution time: " << duration.count() << " seconds" << endl;
 
     return 0;
 }
