@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    // Initializing std::vector with list of multiple values
+    // Initializing a vector with list of multiple values
     vector<int> v = {1, 4, 5, 3, 2};
 
     // Finding the maximum element in the vector v
