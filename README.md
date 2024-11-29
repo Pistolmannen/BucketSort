@@ -1,1 +1,1 @@
-# BucketSort
+# Sorting algorithms
