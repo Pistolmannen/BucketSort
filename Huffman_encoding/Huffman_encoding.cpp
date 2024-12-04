@@ -26,28 +26,50 @@ public:
         }
     };
 
-    int getWeight() const {         // Returns the weight of the tree 
+    int getWeight() {         // Returns the weight of the tree 
         return(weight);
     };
 
-    void printTree(vector<char>& bitString) {   // Print the components of the tree 
+    string printTree(vector<char>& bitString) {   // Print the components of the tree 
         if ((int)character > 96){
             
             for (char bit : bitString) {        // Adds the bit path so it can be printed out
-                fullBit.push_back(bit);
-                fullBit.append(" ");
+                numberBit.push_back(bit);
+                testBit.push_back(bit);
+                numberBit.append(" ");
             }
-             
-            cout << fullBit << " : " << character << endl;
+
+            cout << numberBit << " : " << character << endl;
+
+            for (int i = 0; i < weight; i++){
+                fullBit.append(testBit);
+            }
+            return(fullBit);
+
         }
         else{                               // Continues down the tree
-            bitString.push_back('0');
-            right->printTree(bitString);
 
-            bitString.pop_back();
+            if(right->getWeight() >= left->getWeight()){
+                bitString.push_back('0');
+                fullBit = (right->printTree(bitString));
 
-            bitString.push_back('1');
-            left->printTree(bitString);
+                bitString.pop_back();
+
+                bitString.push_back('1');
+                fullBit.append(left->printTree(bitString));
+            }
+            else{
+                bitString.push_back('1');
+                fullBit = (left->printTree(bitString));
+                
+                bitString.pop_back();
+
+                bitString.push_back('0');
+                fullBit.append(right->printTree(bitString));
+            }
+            
+
+            return(fullBit);
         }
     }; 
 
@@ -55,7 +77,11 @@ private:
     Tree* left;
     Tree* right;
     int weight;
+    int rightWeight;
+    int leftWeight;
     char character;
+    string numberBit;
+    string testBit;
     string fullBit;
 };
 
@@ -97,7 +123,8 @@ int main(int argc, char const *argv[])
     queue.pop();
 
     vector<char> bitString;
-    fullTreeWrapper.tree->printTree(bitString);          // Prints out the tree
+    string answer = (fullTreeWrapper.tree->printTree(bitString));          // Prints out the tree
+    cout << "Answer is: " << answer << endl;
 
     return 0;
 }
