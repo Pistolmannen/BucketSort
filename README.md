@@ -1,1 +1,3 @@
-# Sorting algorithms
+# Multiple different algoritms
+
+Have fun with it! 💀
