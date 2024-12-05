@@ -4,20 +4,23 @@
 
 using namespace std;
 
-class Tree {                                // Tree class
+class Tree {                                
 public:
-    Tree(int w, char c){                    // Creates a tree with a character
+    // Creates a leaf with a character
+    Tree(int w, char c){                    
         weight = w;
         character = c;
     };
 
-    Tree(int w, Tree* t1, Tree* t2){        // Creates a tree with two branches
+    // Creates a tree with two branches
+    Tree(int w, Tree* t1, Tree* t2){        
         weight = w;
         right = t1;
         left = t2;
     };
 
-    ~Tree(){                                // Deletes the root node of the tree
+    // Deletes the root node of the tree
+    ~Tree(){                                
         if (left != NULL){
             free(left);
         }
@@ -26,67 +29,71 @@ public:
         }
     };
 
+    // Retreives the weight of the tree
     int getWeight() {          
         return(weight);                     // Returns the weight of the tree
     };
 
-    string printTree(vector<char>& bitString) {   // Print the components of the tree 
-        if ((int)character > 96){
+    // Print the components of the tree
+    string printTree(vector<char>& bitString) { 
+        if ((int)character > 96){               // If the current function-iteration finds a character/leaf in the tree
             
-            for (char bit : bitString) {        // Adds the bit path so it can be printed out
+            for (char bit : bitString) {        // Adds the whole branch-path (the path down the tree to the character/leaf) to the bit path
                 numberBit.push_back(bit);
-                encodedBitString.push_back(bit);
+                encodedBitString.push_back(bit); // Adds the character bit path to the bit string for that character
                 numberBit.append(" ");
             }
 
-            cout << numberBit << ": " << character << endl;
+            cout << numberBit << ": " << character << endl; // Prints out the branch-path to the character/leaf
 
             for (int i = 0; i < weight; i++){ // Adds the correct bit(s) per character into the output string
-                fullBit.append(encodedBitString);
+                fullBit.append(encodedBitString); // Checks how many time the found character appears in the input
             }
-            return(fullBit);                // Returns the output string
+            return(fullBit);                // Returns the answer bit string for the character
         }
-        else{                               // Continues down the tree
-            if(right->getWeight() >= left->getWeight()){ // Takes the right side if it has a higher or equal weight to the left side
-                bitString.push_back('0');
-                fullBit.append(right->printTree(bitString));
+        else{                               // Continues down the brances
+            if(right->getWeight() >= left->getWeight()){ // Takes the right branch if it has a higher or equal weight to the left branch
+                bitString.push_back('0');               // Adds a 0 to the branch-path down the tree
+                fullBit.append(right->printTree(bitString));  // Calls a new function-iteration to continue down the right branch 
 
-                bitString.pop_back();
+                bitString.pop_back();                   // When the right branch is checked the current function-iteration forgets about the right branch
 
-                bitString.push_back('1');
-                fullBit.append(left->printTree(bitString));
+                bitString.push_back('1');               // Adds a 1 to the branch-path down the tree
+                fullBit.append(left->printTree(bitString));  // Calls a new function-iteration to continue down the left branch 
                 
-                bitString.pop_back();
+                bitString.pop_back();                   // When the left branch is checked the current function-iteration forgets about the left branch
+            }                                            
+            else{                                   // Takes the left side otherwise
+                bitString.push_back('1');           // Adds a 1 to the branch-path down the tree
+                fullBit.append(left->printTree(bitString));  // Calls a new function-iteration to continue down the left branch 
+                
+                bitString.pop_back();               // When the left branch is checked the current function-iteration forgets about the left branch
+
+                bitString.push_back('0');           // Adds a 0 to the branch-path down the tree
+                fullBit.append(right->printTree(bitString));   // Calls a new function-iteration to continue down the right branch 
+                
+                bitString.pop_back();               // When the right branch is checked the current function-iteration forgets about the right branch
             }
-            else{                           // Takes the left side otherwise
-                bitString.push_back('1');
-                fullBit.append(left->printTree(bitString));
-                
-                bitString.pop_back();
-
-                bitString.push_back('0');
-                fullBit.append(right->printTree(bitString));
-                
-                bitString.pop_back();
-            }
-            return(fullBit);                 // Returns the output string
+            return(fullBit);                 // The current function-iteration has no branch left to check so it returns the output string and automatically get's removed
         }
     }; 
 
 private:
     Tree* left;
     Tree* right;
-    int weight;
+    int weight; // The weight is the amount of time a character appears in the input
     char character;
-    string numberBit;
-    string encodedBitString;
-    string fullBit;
+    string numberBit; // Branch-path to the character
+    string encodedBitString; // The actual bit string of a character
+    string fullBit; // Answer bit string
 };
 
 #ifndef NULL
 #define NULL 0
 #endif
-struct TreeWrapper {                           // Tree-helper
+
+// Tree-helper
+struct TreeWrapper {                           
     TreeWrapper() {
         tree = NULL;
     }
@@ -103,11 +110,9 @@ int main(int argc, char const *argv[])
 {
     priority_queue<TreeWrapper> queue;          // Creates the bottom of the tree
     
+    queue.push(TreeWrapper(new Tree(4, 'a')));
     queue.push(TreeWrapper(new Tree(3, 'b')));
     queue.push(TreeWrapper(new Tree(1, 'c')));
-    queue.push(TreeWrapper(new Tree(2, 'j')));
-    queue.push(TreeWrapper(new Tree(7, 'l')));
-    queue.push(TreeWrapper(new Tree(12, 'a')));
 
     while (queue.size() > 1)                    // Puts the entire tree together
     {
@@ -117,15 +122,16 @@ int main(int argc, char const *argv[])
         queue.pop();
         int treeWeight = (tree1.tree->getWeight() + tree2.tree->getWeight());
 
-        queue.push(TreeWrapper(new Tree(treeWeight, tree1.tree, tree2.tree))); 
+        queue.push(TreeWrapper(new Tree(treeWeight, tree1.tree, tree2.tree))); // Puts the combined tree back into the priority queue 
     }
 
-    TreeWrapper fullTreeWrapper = queue.top();      // Retreives the fully built tree
+    // Retreives the fully built tree
+    TreeWrapper fullTreeWrapper = queue.top();      
     queue.pop();
 
     vector<char> bitString;
-    string answer = (fullTreeWrapper.tree->printTree(bitString));          // Prints out the tree
-    cout << "Answer is: " << answer << endl;
+    string answer = (fullTreeWrapper.tree->printTree(bitString));          // Prints out the bith path to all the characters in the final tree
+    cout << "Answer is: " << answer << endl;                               // Prints out the final answer bit string
 
     return 0;
 }
