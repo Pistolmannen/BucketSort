@@ -55,6 +55,8 @@ public:
 
                 bitString.push_back('1');
                 fullBit.append(left->printTree(bitString));
+                
+                bitString.pop_back();
             }
             else{                           // Takes the left side otherwise
                 bitString.push_back('1');
@@ -64,6 +66,8 @@ public:
 
                 bitString.push_back('0');
                 fullBit.append(right->printTree(bitString));
+                
+                bitString.pop_back();
             }
             return(fullBit);                 // Returns the output string
         }
@@ -105,14 +109,6 @@ int main(int argc, char const *argv[])
     queue.push(TreeWrapper(new Tree(7, 'l')));
     queue.push(TreeWrapper(new Tree(12, 'a')));
 
-    /*
-    while (queue.size() > 0) {
-        TreeWrapper test = queue.top();
-        queue.pop();
-        cout << test.tree->getWeight() << endl;
-    }
-    */
-
     while (queue.size() > 1)                    // Puts the entire tree together
     {
         TreeWrapper tree1 = queue.top();
@@ -121,9 +117,7 @@ int main(int argc, char const *argv[])
         queue.pop();
         int treeWeight = (tree1.tree->getWeight() + tree2.tree->getWeight());
 
-        cout << tree1.tree->getWeight() << " plus " << tree2.tree->getWeight() << " make " << treeWeight << endl;
-
-        queue.push(TreeWrapper(new Tree(treeWeight, tree1.tree, tree2.tree)));  // make werd shit cuse priorety :)
+        queue.push(TreeWrapper(new Tree(treeWeight, tree1.tree, tree2.tree))); 
     }
 
     TreeWrapper fullTreeWrapper = queue.top();      // Retreives the fully built tree
