@@ -1,3 +1,3 @@
-# Multiple different algoritms
+# Different algoritms
 
 Have fun with it! 💀
