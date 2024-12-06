@@ -19,7 +19,7 @@ void insertSort(vector<int> arr) {
     }
     
     cout << "Sorted vector: ";
-    for (int i = 0; i < arr[i]; i++) {
+    for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
 }
@@ -28,7 +28,9 @@ int main() {
     auto start = chrono::high_resolution_clock::now(); 
     
     // Initializing a vector with list of multiple values
-    vector<int> v = {1, 4, 5, 3, 2,};
+    vector<int> v = {1, 4, 5, 3, 2};
+
+
     int n = v.size();
 
     cout << "Unsorted vector: ";
@@ -40,10 +42,9 @@ int main() {
     insertSort(v);
 
     auto end = chrono::high_resolution_clock::now(); 
-    chrono::duration<double> duration = end - start; 
  
     cout << endl;
-    cout << "Execution time: " << duration.count() << " seconds" << endl;
+    cout << "Execution time: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " milliseconds" << endl;
 
     return 0;
 }

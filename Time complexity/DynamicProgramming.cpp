@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <chrono>
 
 using namespace std;
 
@@ -35,13 +36,19 @@ int Timefunction(float n, vector<int> calculatedValues){
 
 int main(int argc, char const *argv[]){ 
 
-    float inputValue = 2; // Input value
+    auto start = chrono::high_resolution_clock::now(); 
+
+    float inputValue = 200; // Input value
 
     vector<int> calculatedValues(inputValue); // Creates a vector with the size of the inputed value
     
-    int Answer = Timefunction(inputValue, calculatedValues);  // Start function-iterations
+    int answer = Timefunction(inputValue, calculatedValues);  // Start function-iterations
+
+    auto end = chrono::high_resolution_clock::now(); 
+
+    chrono::milliseconds spentTime = chrono::duration_cast<chrono::milliseconds>(end - start);
     
-    cout << Answer; // Result from all function-interations
+    cout << answer << " time spent: " << spentTime.count(); // Result from all function-interations
     
     return 0;
 }

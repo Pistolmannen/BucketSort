@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+#include <chrono>
+
 
 using namespace std;
 
@@ -16,9 +18,18 @@ int Timefunction(float n){
 }
 
 int main(int argc, char const *argv[]){ 
-    int Answer = Timefunction(2);  // Start input
+
+    auto start = chrono::high_resolution_clock::now(); 
+
+    float inputValue = 200; // Input value
+
+    int Answer = Timefunction(inputValue);  // Start input
+
+    auto end = chrono::high_resolution_clock::now(); 
+
+    chrono::milliseconds spentTime = chrono::duration_cast<chrono::milliseconds>(end - start);
     
-    cout << Answer; // Result
+    cout << Answer << " time spent: " << spentTime.count(); // Result
     
     return 0;
 }

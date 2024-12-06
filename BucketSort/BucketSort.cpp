@@ -9,7 +9,7 @@ int main() {
     auto start = chrono::high_resolution_clock::now(); 
 
     // Initializing a vector with list of multiple values
-    vector<int> v = {1, 4, 5, 3, 2,};
+    vector<int> v = {1, 4, 5, 3, 2};
 
     // Finding the maximum element in the vector v
     int k = *max_element(v.begin(), v.end());
@@ -27,11 +27,10 @@ int main() {
             cout << i << " ";
         }
     
-    auto end = chrono::high_resolution_clock::now(); 
-    chrono::duration<double> duration = end - start; 
+    auto end = chrono::high_resolution_clock::now();
     
     cout << endl;
-    cout << "Execution time: " << duration.count() << " seconds" << endl;
+    cout << "Execution time: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " milliseconds" << endl;
 
     return 0;
 }
